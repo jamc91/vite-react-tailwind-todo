@@ -1,78 +1,69 @@
-import CrossIcon from "./components/icons/CrossIcon";
-import MoonIcon from "./components/icons/MoonIcon";
+import Header from "./components/Header";
+import CreateTodo from "./components/CreateTodo";
+import TodoList from "./components/TodoList";
+import BottomLabels from "./components/BottomLabels";
+import FilterButtons from "./components/FilterButtons";
+import DragAndDrop from "./DragAndDrop";
+import { useState } from "react";
+
+const initialStateTodos = [
+  {
+    id: 0,
+    title: "Complete online javascript course in bluuweb",
+    completed: true,
+  },
+  {
+    id: 1,
+    title: "Go to the Gym!",
+    completed: false,
+  },
+];
 
 const App = () => {
+  const [todos, setTodos] = useState(initialStateTodos);
+
+  const createTodo = (title) => {
+    const newTodo = {
+      id: Date.now(),
+      title,
+      completed: false,
+    };
+
+    setTodos([...todos, newTodo]);
+  };
+
+  const updateTodo = (id) => {
+    const newArray = todos.map((todo) => {
+      if (todo.id === id) {
+        todo.completed = !todo.completed;
+      }
+      return todo;
+    });
+
+    setTodos(newArray);
+  };
+
+  const deleteTodo = (id) => {
+    const newArray = todos.filter((todo) => todo.id !== id);
+
+    setTodos(newArray);
+  };
+
   return (
     <>
       <div className="min-h-screen bg-gray-100 bg-[url(./assets/images/bg-mobile-light.jpg)] bg-contain bg-no-repeat">
-        <header className="container mx-auto px-4">
-          <div className="flex justify-between py-6">
-            <h1 className="text-2xl font-semibold uppercase tracking-[0.4em] text-white">
-              Todo
-            </h1>
-            <button className="">
-              <MoonIcon />
-            </button>
-          </div>
-          <form className="flex items-center gap-2 overflow-hidden rounded-md bg-white px-4 py-2">
-            <span className="border-sm inline-block h-5 w-5 rounded-full border-2"></span>
-            <input
-              className="w-full text-gray-400 outline-none"
-              type="text"
-              placeholder="create a new todo"
-            />
-          </form>
-        </header>
+        <Header />
         <main className="container mx-auto mt-8 px-4 ">
-          <div className="rounded-md bg-white">
-            <article className="flex items-center gap-2 border-b border-b-gray-200 p-4">
-              <button className="inline-block h-5 w-5 flex-none rounded-full border-2"></button>
-              <p className="grow text-gray-600">
-                Complete online javascript course in bluuweb
-              </p>
-              <button className="flex-none">
-                <CrossIcon />
-              </button>
-            </article>
-
-            <article className="flex items-center gap-2 border-b border-b-gray-200 p-4">
-              <button className="inline-block h-5 w-5 flex-none rounded-full border-2"></button>
-              <p className="grow text-gray-600">
-                Complete online javascript course in bluuweb
-              </p>
-              <button className="flex-none">
-                <CrossIcon />
-              </button>
-            </article>
-
-            <article className="flex items-center gap-2 border-b border-b-gray-200 p-4">
-              <button className="inline-block h-5 w-5 flex-none rounded-full border-2"></button>
-              <p className="grow text-gray-600">
-                Complete online javascript course in bluuweb
-              </p>
-              <button className="flex-none">
-                <CrossIcon />
-              </button>
-            </article>
-
-            <section className="flex justify-between p-4">
-              <span className="text-gray-400">5 items left</span>
-              <button className="text-gray-400">clear completed</button>
-            </section>
-          </div>
+          <CreateTodo createTodo={(title) => createTodo(title)} />
+          <TodoList
+            todos={todos}
+            updateTodo={updateTodo}
+            deleteTodo={deleteTodo}
+          />
+          <BottomLabels />
+          <FilterButtons />
         </main>
-
-        <section className="container mx-auto mt-8 px-4">
-          <div className="flex justify-evenly rounded-md bg-white p-4">
-            <button className="hover:text-blue-600">All</button>
-            <button className="hover:text-blue-600">Active</button>
-            <button className="hover:text-blue-600">Completed</button>
-          </div>
-        </section>
-
-        <section className="mt-8 text-center text-sm text-gray-400">
-          Drag and drop reorder list
-        </section>
+        <DragAndDrop />
       </div>
     </>
   );
