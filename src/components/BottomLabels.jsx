@@ -1,6 +1,6 @@
 const BottomLabels = ({ count, clearCompleted }) => {
   return (
-    <section className="flex items-center justify-between rounded-b-md bg-white px-4 py-2">
+    <section className="flex items-center justify-between rounded-b-md bg-white px-4 py-2 transition-all duration-500 dark:bg-gray-800">
       <span className="text-sm text-gray-400">{`${count} ${
         count > 1 ? "items" : "item"
       } left`}</span>

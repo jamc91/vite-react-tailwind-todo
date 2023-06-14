@@ -1,7 +1,7 @@
 const FilterButtons = ({ filter, selection }) => {
   return (
     <section className="mt-8">
-      <div className="flex justify-evenly rounded-md bg-white p-4">
+      <div className="flex justify-evenly rounded-md bg-white p-4 transition-all duration-500 dark:bg-gray-800 ">
         <button
           onClick={() => filter("all")}
           className={`${

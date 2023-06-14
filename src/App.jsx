@@ -4,11 +4,19 @@ import TodoList from "./components/TodoList";
 import BottomLabels from "./components/BottomLabels";
 import FilterButtons from "./components/FilterButtons";
 import DragAndDrop from "./DragAndDrop";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const App = () => {
-  const [todos, setTodos] = useState([]);
-  const [filter, setFilter] = useState("all");
+  const [todos, setTodos] = useState(() => {
+    return JSON.parse(localStorage.getItem("todos")) ?? [];
+  });
+  const [filter, setFilter] = useState(() => {
+    return localStorage.getItem("filter") ?? "all";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const createTodo = (title) => {
     const newTodo = {
@@ -56,14 +64,17 @@ const App = () => {
     }
   };
 
-  const changeFilter = (filter) => setFilter(filter);
+  const changeFilter = (filter) => {
+    setFilter(filter);
+    localStorage.setItem("filter", filter);
+  };
   const todosLeft = todos.filter((todo) => !todo.completed).length;
 
   return (
     <>
-      <div className="min-h-screen bg-gray-100 bg-[url(./assets/images/bg-mobile-light.jpg)] bg-contain bg-no-repeat">
+      <div className="min-h-screen bg-gray-100 bg-[url(./assets/images/bg-mobile-light.jpg)] bg-contain bg-no-repeat transition-all duration-500 dark:bg-gray-900 dark:bg-[url(./assets/images/bg-mobile-dark.jpg)] md:bg-[url(./assets/images/bg-desktop-light.jpg)] md:dark:bg-[url(./assets/images/bg-desktop-light.jpg)]">
         <Header />
-        <main className="container mx-auto mt-8 px-4 ">
+        <main className="container mx-auto px-4 md:max-w-2xl">
           <CreateTodo createTodo={(title) => createTodo(title)} />
           {todos.length === 0 ? (
             <div className="container mx-auto mt-8 rounded-md bg-white p-4">
